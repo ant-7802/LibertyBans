@@ -1,7 +1,0 @@
-name: ${plugin.name}
-main: ${project.groupId}.env.bungee.plugin.BungeePlugin
-version: ${plugin.version}
-author: '${plugin.author}'
-description: ${plugin.description}
-website: ${plugin.url}
-softDepends: [LuckPerms]
