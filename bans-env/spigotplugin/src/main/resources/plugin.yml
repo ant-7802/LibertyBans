@@ -1,0 +1,9 @@
+name: ${plugin.name}
+main: ${project.groupId}.env.spigot.plugin.SpigotPlugin
+version: ${plugin.version}
+author: '${plugin.author}'
+description: ${plugin.description}
+website: ${plugin.url}
+api-version: 1.13
+softdepend: [LuckPerms, Vault]
+folia-supported: true

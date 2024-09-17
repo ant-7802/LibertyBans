@@ -1,0 +1,4 @@
+space.arim.libertybans
+bans-download
+${project.version}
+${self-implementation.hash}

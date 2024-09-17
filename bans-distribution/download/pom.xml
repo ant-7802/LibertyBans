@@ -1,0 +1,124 @@
+<!--
+  ~ LibertyBans
+  ~ Copyright © 2023 Anand Beh
+  ~
+  ~ LibertyBans is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ LibertyBans is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with LibertyBans. If not, see <https://www.gnu.org/licenses/>
+  ~ and navigate to version 3 of the GNU Affero General Public License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>space.arim.libertybans</groupId>
+		<artifactId>bans-distribution</artifactId>
+		<version>1.1.0-RC2</version>
+	</parent>
+	
+	<artifactId>bans-download</artifactId>
+	<description>Implementation jar with dependencies shaded. Downloaded at runtime.</description>
+
+	<properties>
+		<bans-distribution.module-hash>${self-implementation.hash}</bans-distribution.module-hash>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<configuration>
+					<artifactSet>
+						<excludes>
+							<exclude>space.arim.libertybans:bans-api</exclude>
+							<exclude>space.arim.omnibus:omnibus</exclude>
+							<exclude>space.arim.libertybans:bans-bootstrap</exclude>
+
+							<exclude>org.slf4j:slf4j-api</exclude>
+							<exclude>org.yaml:snakeyaml</exclude>
+							<exclude>com.google.code.gson:gson</exclude>
+							<exclude>org.checkerframework:checker-qual</exclude>
+							<exclude>com.google.errorprone:error_prone_annotations</exclude>
+							<exclude>net.kyori:*</exclude>
+							<exclude>org.jetbrains:annotations</exclude>
+							<exclude>com.github.ben-manes.caffeine:caffeine</exclude>
+							<exclude>jakarta.inject:jakarta.inject-api</exclude>
+						</excludes>
+					</artifactSet>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>deploy-snapshot</id>
+			<build>
+				<plugins>
+					<!-- Skip deployment -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>check-hash</id>
+			<build>
+				<plugins>
+					<!-- Check hash of own jar -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>verify-hash</id>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+	<dependencies>
+		<dependency>
+			<groupId>space.arim.libertybans</groupId>
+			<artifactId>bans-env-bungee</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.libertybans</groupId>
+			<artifactId>bans-env-spigot</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.libertybans</groupId>
+			<artifactId>bans-env-sponge</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.libertybans</groupId>
+			<artifactId>bans-env-velocity</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>space.arim.libertybans</groupId>
+			<artifactId>bans-env-standalone</artifactId>
+		</dependency>
+	</dependencies>
+</project>

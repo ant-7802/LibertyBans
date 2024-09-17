@@ -1,0 +1,30 @@
+* Configuration
+  * [Getting Started](Getting-Started)
+  * [Configuration](Configuration)
+  * [Permissions](Permissions)
+  * [JSON Messages](JSON-Messages)
+  * [Hex Colors](Color-Codes)
+  * [Lenient, Normal, and Strict punishment enforcement](Punishment-Enforcement_-Lenient,-Normal,-and-Strict-settings)
+  * [Silent Punishments](Silent-Punishments)
+  * [Composite Punishments](Guide-to-Composite-Punishments)
+  * [Scoped Punishments](Scoped-Punishments)
+  * [Running Multiple Instances](Running-Multiple-Instances)
+  * [Switching Storage Backends (Self-Importing)](Self-Importing)
+  * [Addons](Addons)
+* Versioning and Upgrades
+  * [Versioning and Support Policy](Versioning-and-Support-Policies)
+  * [Upgrading 1.0.x -> 1.1.0](Upgrading-to-LibertyBans-1.1.0-from-1.0.x.md) + [Full changelog for 1.1.0](Changes-in-LibertyBans-1.1.0.md)
+  * [Upgrading 0.8.x -> 1.0.0](Upgrading-to-LibertyBans-1.0.0-from-0.8.x) + [Full changelog for 1.0.0](Changes-in-LibertyBans-1.0.0)
+* Technical
+  * [Developer API](Developer-API)
+  * [The Database Schema](The-Database-Schema)
+  * [Achieving High Performance](Database-Performance)
+* Relations to other software
+  * [Importing from other plugins](Importing-from-Other-Plugins)
+  * [Dealing with misbehaving plugins](Misbehaving-Plugins)
+* Comparison to Other Plugins
+  * [Comparison to AdvancedBan](Comparison-to-AdvancedBan)
+  * [Comparison to BanManager](Comparison-to-BanManager)
+  * [Comparison to LiteBans](Comparison-to-LiteBans)
+  * [Quick Plugin Comparison](Quick-Plugin-Comparison)
+  * [Plugin Comparison Conclusions](Plugin-Comparison-Conclusions)

@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>space.arim.libertybans</groupId>
+		<artifactId>bans-parent</artifactId>
+		<version>1.1.0-RC2</version>
+	</parent>
+	
+	<artifactId>bans-distribution</artifactId>
+	<packaging>pom</packaging>
+	<description>Parent pom for distribution-related modules.</description>
+
+	<properties>
+		<bans-distribution.can-deploy>true</bans-distribution.can-deploy>
+		<bans-distribution.module-hash/>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- Ensure either the check-hash or deploy-snapshot profile is active -->
+						<id>enforce-deployment-profile</id>
+						<phase>install</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireActiveProfile>
+									<profiles>check-hash,deploy-snapshot</profiles>
+									<all>false</all>
+									<message>You need to enable the deploy-snapshot profile, or the check-hash profile if performing a release</message>
+								</requireActiveProfile>
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>verify-hash</id>
+						<phase>none</phase> <!-- Disable by default -->
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireFileChecksum>
+									<file>${project.build.directory}/${project.build.finalName}.jar</file>
+									<checksum>${bans-distribution.module-hash}</checksum>
+									<type>sha512</type>
+								</requireFileChecksum>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<configuration>
+						<filters>
+							<filter>
+								<artifact>*:*</artifact>
+								<excludes>
+									<exclude>**/module-info.class</exclude>
+								</excludes>
+							</filter>
+						</filters>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<modules>
+		<module>download</module>
+		<module>distributable</module>
+		<module>executable</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>space.arim.libertybans</groupId>
+				<artifactId>bans-distributable</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>space.arim.libertybans</groupId>
+				<artifactId>bans-download</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>space.arim.licenser</groupId>
+			<artifactId>licenser-agpl3</artifactId>
+		</dependency>
+	</dependencies>
+</project>
