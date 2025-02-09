@@ -28,7 +28,6 @@ import space.arim.libertybans.api.punish.Punishment;
 import space.arim.libertybans.api.select.PunishmentSelector;
 import space.arim.libertybans.core.config.Configs;
 import space.arim.libertybans.core.config.InternalFormatter;
-import space.arim.libertybans.core.config.SqlConfig;
 import space.arim.libertybans.core.env.EnvUserResolver;
 import space.arim.libertybans.core.service.Time;
 import space.arim.omnibus.util.concurrent.CentralisedFuture;
@@ -45,7 +44,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -83,15 +81,27 @@ public final class AlwaysAvailableMuteCache extends BaseMuteCache {
 	}
 
 	@Override
-	void installCache(Duration expirationTime, SqlConfig.MuteCaching.ExpirationSemantic expirationSemantic) {
-		ConcurrentHashMap<MuteCacheKey, Entry> map = new ConcurrentHashMap<>();
-		Cache cache = new Cache(map, expirationTime);
-		cache.startPurgeTask();
-		this.cache = cache;
+	public void startup() {
+		installCache((expirationTime, expirationSemantic) -> {
+			Cache cache = new Cache(new ConcurrentHashMap<>(), expirationTime);
+			cache.startPurgeTask();
+			this.cache = cache;
+		});
 	}
 
 	@Override
-	void uninstallCache() {
+	public void restart() {
+		installCache((expirationTime, expirationSemantic) -> {
+			Cache oldCache = this.cache;
+			oldCache.stopPurgeTask();
+			Cache newCache = new Cache(oldCache.map, expirationTime);
+			newCache.startPurgeTask();
+			this.cache = newCache;
+		});
+	}
+
+	@Override
+	public void shutdown() {
 		cache.stopPurgeTask();
 	}
 
@@ -115,18 +125,14 @@ public final class AlwaysAvailableMuteCache extends BaseMuteCache {
 
 	@Override
 	public CentralisedFuture<Optional<Punishment>> getCachedMute(UUID uuid, NetworkAddress address) {
-		return cacheRequestTo(uuid, address, MuteAndMessage::mute);
+		return cacheRequest(new MuteCacheKey(uuid, address))
+				.thenApply((opt) -> opt.map(MuteAndMessage::mute));
 	}
 
 	@Override
 	public CentralisedFuture<Optional<Component>> getCachedMuteMessage(UUID uuid, NetworkAddress address) {
-		return cacheRequestTo(uuid, address, MuteAndMessage::message);
-	}
-
-	private <T> CentralisedFuture<Optional<T>> cacheRequestTo(UUID uuid, NetworkAddress address,
-															  Function<MuteAndMessage, T> toWhich) {
 		return cacheRequest(new MuteCacheKey(uuid, address))
-				.thenApply((muteAndMessage) -> muteAndMessage.map(toWhich));
+				.thenApply((opt) -> opt.map(MuteAndMessage::message));
 	}
 
 	private CentralisedFuture<Optional<MuteAndMessage>> cacheRequest(MuteCacheKey cacheKey) {

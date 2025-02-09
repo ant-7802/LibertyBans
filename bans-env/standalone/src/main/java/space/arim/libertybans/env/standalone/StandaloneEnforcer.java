@@ -51,6 +51,11 @@ final class StandaloneEnforcer implements EnvEnforcer<Void> {
 	}
 
 	@Override
+	public CentralisedFuture<Void> sendToThoseWithPermissionNoPrefix(String permission, ComponentLike message) {
+		return completedVoid();
+	}
+
+	@Override
 	public CentralisedFuture<Void> doForPlayerIfOnline(UUID uuid, Consumer<Void> callback) {
 		return completedVoid();
 	}
@@ -66,7 +71,7 @@ final class StandaloneEnforcer implements EnvEnforcer<Void> {
 	}
 
 	@Override
-	public <D> void sendPluginMessage(Void player, PluginMessage<D, ?> pluginMessage, D data) {
+	public <D> boolean sendPluginMessageIfListening(Void player, PluginMessage<D, ?> pluginMessage, D data) {
 		throw new UnsupportedOperationException();
 	}
 
