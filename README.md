@@ -32,7 +32,7 @@
 
 ## Introduction
 
-Free software and high quality, LibertyBans is the best-designed punishment plugin. It can efficiently scale to large networks and operate on single servers with minimal resources.
+Free software and high quality, LibertyBans is the best-designed punishment plugin.  It can efficiently scale to large networks and operate on single servers with minimal resources.
 
 ### Design
 
