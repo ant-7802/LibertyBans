@@ -160,7 +160,7 @@ public interface EnforcementConfig {
 				"If you are running a proxy and don't want to register the IP when players connect, ",
 				"set this to false and add the authentication servers' names in the list above.",
 				"If this is a backend server, set it to false; if it's an authentication server, set to true."})
-		@ConfKey("should-register-on-connection)")
+		@ConfKey("should-register-on-connection")
 		@ConfDefault.DefaultBoolean(true)
 		boolean shouldRegisterOnConnection();
 	}
